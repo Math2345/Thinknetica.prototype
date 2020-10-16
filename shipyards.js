@@ -46,21 +46,30 @@ Shipyards.getColor = function () {
 
 Shipyards.prototype = {
     repair: function (ship) {
-        if (ship.isBreak) {
-            ship.isBreak = false;
+        if (ship instanceof MotorShip && ship instanceof SailingShip) {
+            if (ship.isBreak) {
+                ship.isBreak = false;
 
-            return ship;
+                return ship;
+            }
+        } else {
+            throw ('Верфь не обслуживает корабль такого типа');
         }
     },
 
     repaint: function (ship) {
-       const newColor = Shipyards.getColor();
+        if (ship instanceof MotorShip && ship instanceof SailingShip) {
+            const newColor = Shipyards.getColor();
 
-       if (newColor !== ship.color) {
-           ship.color = newColor;
+            if (newColor !== ship.color) {
+                ship.color = newColor;
 
-           return ship;
-       }
+                return ship;
+            } else {
+                throw ('Верфь не обслуживает корабль такого типа');
+            }
+
+        }
     }
 }
 
@@ -76,9 +85,14 @@ MotorShipyards.prototype.createMotorShip = function (...propShip) {
 }
 
 MotorShipyards.prototype.changeShip = function (oldShip, ...propNewShip ) {
-   oldShip = null;
+    if (oldShip instanceof SailingShip) {
+        oldShip = null;
 
-   return new MotorShip(propNewShip);
+        return new MotorShip(propNewShip);
+
+    } else {
+        throw ('Верфь не обслуживает корабль такого типа');
+    };
 }
 
 SailingShipyards.prototype.createSailingShip = function (...propShip) {
@@ -86,9 +100,14 @@ SailingShipyards.prototype.createSailingShip = function (...propShip) {
 }
 
 SailingShipyards.prototype.changeShip = function (oldShip, ...propNewShip ) {
-    oldShip = null;
+    if (oldShip instanceof SailingShip) {
+        oldShip = null;
 
-    return new SailingShipyards(propNewShip);
+        return new SailingShip(propNewShip);
+
+    } else {
+        throw ('Верфь не обслуживает корабль такого типа');
+    }
 }
 
 
